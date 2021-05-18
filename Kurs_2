@@ -1,0 +1,160 @@
+using System;
+
+namespace _1
+{
+    class Program
+    {
+        /// <summary>
+        /// Проверка элемента справа
+        /// </summary>
+        /// <param name="el"></param>
+        /// <param name="massive"></param>
+        /// <param name="cell"></param>
+        static public void Right((int, int) el, int[,] massive, int cell)
+        {
+            if ((el.Item1 != massive.GetLength(1) - 1) || (el.Item2 != massive.GetLength(2) - 1))
+            {
+                if (massive[el.Item1, el.Item2 + 1] == 0)
+                {
+                    massive[el.Item1, el.Item2] = cell;
+                    el.Item2++;
+                    Right(el, massive, cell);
+                }
+                else
+                {
+                    Down(el, massive, cell);
+                    Right(el, massive, cell);
+                    return;
+                }
+            }
+            else
+            {
+                return;
+            }
+        }
+
+        /// <summary>
+        /// Проверка элемента снизу
+        /// </summary>
+        /// <param name="el"></param>
+        /// <param name="massive"></param>
+        /// <param name="cell"></param>
+        static public void Down((int, int) el, int[,] massive, int cell)
+        {
+            if ((el.Item1 != massive.GetLength(1) - 1) || (el.Item2 != massive.GetLength(2) - 1))
+            {
+                if (massive[el.Item1 + 1, el.Item2] == 0)
+                {
+                    massive[el.Item1, el.Item2] = cell;
+                    el.Item1++;
+                    Right(el, massive, cell);
+                }
+                else
+                {
+                    Left(el, massive, cell);
+                    Right(el, massive, cell);
+                    return;
+                }
+            }
+
+            else return;
+        }
+
+        /// <summary>
+        /// Проверка элемента слева
+        /// </summary>
+        /// <param name="el"></param>
+        /// <param name="massive"></param>
+        /// <param name="cell"></param>
+        static public void Left((int, int) el, int[,] massive, int cell)
+        {
+            if ((el.Item1 != massive.GetLength(1) - 1) || (el.Item2 != massive.GetLength(2) - 1))
+            {
+                if (massive[el.Item1, el.Item2 - 1] == 0)
+                {
+                    massive[el.Item1, el.Item2] = cell;
+                    el.Item2--;
+                    Right(el, massive, cell);
+                }
+                else
+                {
+                    Up(el, massive, cell);
+                    Right(el, massive, cell);
+                    return;
+                }
+            }
+            else return;
+        }
+
+        /// <summary>
+        /// Проверка элемента сверху
+        /// </summary>
+        /// <param name="el"></param>
+        /// <param name="massive"></param>
+        /// <param name="cell"></param>
+        static public void Up((int, int) el, int[,] massive, int cell)
+        {
+            if ((el.Item1 != massive.GetLength(1) - 1) || (el.Item2 != massive.GetLength(2) - 1))
+            {
+                if (massive[el.Item1 - 1, el.Item2] == 0)
+                {
+                    massive[el.Item1, el.Item2] = cell;
+                    el.Item1--;
+                    Right(el, massive, cell);
+                }
+                else
+                {
+                    return;
+                }
+            }
+            else return;
+        }
+
+        static void Main(string[] args)
+        {
+            int count = 0, i, j, cell = 2;
+            (int, int) first = (0, 0);
+
+            int[,] X = new int[,] {{ 1, 0, 0, 0, 1 },
+                                    { 1, 1, 0, 1, 1 },
+                                    { 1, 1, 1, 1, 0 },
+                                    { 0, 0, 1, 1, 0 },
+                                    { 1, 0, 0, 1, 1 }};
+
+            foreach (int x in X)
+                if (x == 0)
+                    count += 1;
+            do
+            {
+                for (i = 0; i < X.GetLength(0); i++)
+                {
+                    for (j = 0; j < X.GetLength(1); j++)
+                    {
+                        if (X[i, j] == 0)
+                        {
+                            first = (i, j);
+                            break;
+                        }
+                    }
+
+                }
+                Right(first, X, cell);
+                cell++;
+            }
+            while (count != 0);
+
+            ///<summary>
+            ///Вывод окончательного массива
+            /// </summary>
+            for (i = 0; i < X.GetLength(0); i++)
+            {
+                for (j = 0; j < X.GetLength(1); j++)
+                {
+                    Console.Write(X[i, j] + " ");
+                }
+                Console.WriteLine();
+            }
+
+        }
+    }
+}
